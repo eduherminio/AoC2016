@@ -16,7 +16,7 @@ namespace AdventOfCode
             _input = ParseInput().ToList();
         }
 
-        public override string Solve_1()
+        public override ValueTask<string> Solve_1()
         {
             var position = new Point(0, 0);
             var direction = _input[0].Direction;
@@ -35,10 +35,10 @@ namespace AdventOfCode
                 position = position.Move(direction, instruction.Distance);
             }
 
-            return position.ManhattanDistance(new Point(0, 0)).ToString();
+            return new(position.ManhattanDistance(new Point(0, 0)).ToString());
         }
 
-        public override string Solve_2()
+        public override ValueTask<string> Solve_2()
         {
             var visitedPositions = new HashSet<Point>();
 
@@ -76,7 +76,7 @@ namespace AdventOfCode
                 if (shouldBreak) break;
             }
 
-            return position.ManhattanDistance(new Point(0, 0)).ToString();
+            return new(position.ManhattanDistance(new Point(0, 0)).ToString());
         }
 
         private IEnumerable<Instruction> ParseInput()
@@ -92,6 +92,6 @@ namespace AdventOfCode
             }
         }
 
-        private record Instruction(Direction Direction, int Distance);
+        private sealed record Instruction(Direction Direction, int Distance);
     }
 }
