@@ -45,4 +45,4 @@ jobs:
 
     - name: Run
       run: dotnet run -c Release --no-build -- all
-      working-directory: ./src/AoC_2016
+      working-directory: ./src/AdventOfCode
