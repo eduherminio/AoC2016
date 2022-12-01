@@ -1,19 +1,25 @@
 using AoCHelper;
-using System;
 using Xunit;
 
-namespace AdventOfCode.Test
-{
-    public class SolutionsTests
-    {
-        [Theory]
-        [InlineData(typeof(Day_01), "288", "111")]
-        public void Solutions(Type type, string sol1, string sol2)
-        {
-            var instance = Activator.CreateInstance(type) as BaseDay;
+namespace AdventOfCode.Test;
 
-            Assert.Equal(sol1, instance.Solve_1());
-            Assert.Equal(sol2, instance.Solve_2());
+#pragma warning disable IL2067 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The parameter of method does not have matching annotations.
+public class SolutionTests
+{
+    [Theory]
+    [InlineData(typeof(Day_01), "288", "111")]
+    [InlineData(typeof(Day_02), "47978", "659AD")]
+    public static async Task Test(Type type, string sol1, string sol2)
+    {
+        if (Activator.CreateInstance(type) is BaseProblem instance)
+        {
+            Assert.Equal(sol1, await instance.Solve_1());
+            Assert.Equal(sol2, await instance.Solve_2());
+        }
+        else
+        {
+            Assert.Fail($"{type} is not a BaseDay");
         }
     }
 }
+#pragma warning restore IL2067 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The parameter of method does not have matching annotations.
