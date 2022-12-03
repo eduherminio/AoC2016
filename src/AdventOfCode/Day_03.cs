@@ -26,9 +26,9 @@ public class Day_03 : BaseDay
 
         for (int i = 0; i < _input.Count - 2; i += 3)
         {
-            var t1 = new int[] { _input[i][0], _input[i + 1][0], _input[i + 2][0] };
-            var t2 = new int[] { _input[i][1], _input[i + 1][1], _input[i + 2][1] };
-            var t3 = new int[] { _input[i][2], _input[i + 1][2], _input[i + 2][2] };
+            var t1 = new int[3] { _input[i][0], _input[i + 1][0], _input[i + 2][0] };
+            var t2 = new int[3] { _input[i][1], _input[i + 1][1], _input[i + 2][1] };
+            var t3 = new int[3] { _input[i][2], _input[i + 1][2], _input[i + 2][2] };
 
             counter += IsTriangle(t1) + IsTriangle(t2) + IsTriangle(t3);
         }
@@ -53,7 +53,7 @@ public class Day_03 : BaseDay
         while (!file.Empty)
         {
             var line = file.NextLine();
-            yield return new[] { line.NextElement<int>(), line.NextElement<int>(), line.NextElement<int>() };
+            yield return new int[3] { line.NextElement<int>(), line.NextElement<int>(), line.NextElement<int>() };
         }
     }
 }
