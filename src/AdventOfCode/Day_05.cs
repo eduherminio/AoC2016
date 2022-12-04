@@ -25,11 +25,11 @@ public class Day_05 : BaseDay
 
             if (hash[0] == 0 && hash[1] == 0)
             {
-                var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
+                var hashedString = hash[2].ToString("x2");
 
-                if (hashedString.StartsWith("00000"))
+                if (hashedString[0] == '0')
                 {
-                    result += hashedString[5];
+                    result += hashedString[1];
                     if (result.Length == 8)
                     {
                         return new(result);
@@ -52,13 +52,13 @@ public class Day_05 : BaseDay
 
             if (hash[0] == 0 && hash[1] == 0)
             {
-                var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
+                var hashedString = hash[2].ToString("x2") + hash[3].ToString("x2");
 
-                if (hashedString.StartsWith("00000"))
+                if (hashedString[0] == '0')
                 {
-                    if (int.TryParse(hashedString[5].ToString(), out var position) && position < 8 && result[position] == default)
+                    if (int.TryParse(hashedString[1].ToString(), out var position) && position < 8 && result[position] == default)
                     {
-                        result[position] = hashedString[6];
+                        result[position] = hashedString[2];
                     }
                     if (result.All(ch => ch != default))
                     {
