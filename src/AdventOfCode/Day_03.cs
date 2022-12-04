@@ -2,7 +2,7 @@
 
 public class Day_03 : BaseDay
 {
-    private readonly List<int[]> _input;
+    private readonly List<(int A, int B, int C)> _input;
 
     public Day_03()
     {
@@ -12,9 +12,9 @@ public class Day_03 : BaseDay
     public override ValueTask<string> Solve_1()
     {
         int counter = 0;
-        foreach (var triangle in _input)
+        foreach (var (A, B, C) in _input)
         {
-            counter += IsTriangle(triangle);
+            counter += IsTriangle(A, B, C);
         }
 
         return new(counter.ToString());
@@ -26,20 +26,18 @@ public class Day_03 : BaseDay
 
         for (int i = 0; i < _input.Count - 2; i += 3)
         {
-            var t1 = new int[3] { _input[i][0], _input[i + 1][0], _input[i + 2][0] };
-            var t2 = new int[3] { _input[i][1], _input[i + 1][1], _input[i + 2][1] };
-            var t3 = new int[3] { _input[i][2], _input[i + 1][2], _input[i + 2][2] };
-
-            counter += IsTriangle(t1) + IsTriangle(t2) + IsTriangle(t3);
+            counter += IsTriangle(_input[i].A, _input[i + 1].A, _input[i + 2].A)
+                     + IsTriangle(_input[i].B, _input[i + 1].B, _input[i + 2].B)
+                     + IsTriangle(_input[i].C, _input[i + 1].C, _input[i + 2].C);
         }
         return new(counter.ToString());
     }
 
-    private static int IsTriangle(int[] triangle)
+    private static int IsTriangle(int A, int B, int C)
     {
-        if (triangle[0] + triangle[1] > triangle[2]
-            && triangle[0] + triangle[2] > triangle[1]
-            && triangle[1] + triangle[2] > triangle[0])
+        if (A + B > C
+            && A + C > B
+            && B + C > A)
         {
             return 1;
         }
@@ -47,13 +45,13 @@ public class Day_03 : BaseDay
         return 0;
     }
 
-    private IEnumerable<int[]> ParseInput()
+    private IEnumerable<(int, int, int)> ParseInput()
     {
         var file = new ParsedFile(InputFilePath);
         while (!file.Empty)
         {
             var line = file.NextLine();
-            yield return new int[3] { line.NextElement<int>(), line.NextElement<int>(), line.NextElement<int>() };
+            yield return (line.NextElement<int>(), line.NextElement<int>(), line.NextElement<int>());
         }
     }
 }
