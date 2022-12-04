@@ -21,11 +21,12 @@ public class Day_05 : BaseDay
         while (true)
         {
             var str = _input + index++;
-            var hash = string.Concat(MD5.HashData(encoder.GetBytes(str)).Select(by => by.ToString("x2")));
+            var hash = MD5.HashData(encoder.GetBytes(str));
+            var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
 
-            if (hash.StartsWith("00000"))
+            if (hashedString.StartsWith("00000"))
             {
-                result += hash[5];
+                result += hashedString[5];
                 if (result.Length == 8)
                 {
                     return new(result);
@@ -43,13 +44,14 @@ public class Day_05 : BaseDay
         while (true)
         {
             var str = _input + index++;
-            var hash = string.Concat(MD5.HashData(encoder.GetBytes(str)).Select(by => by.ToString("x2")));
+            var hash = MD5.HashData(encoder.GetBytes(str));
+            var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
 
-            if (hash.StartsWith("00000"))
+            if (hashedString.StartsWith("00000"))
             {
-                if (int.TryParse(hash[5].ToString(), out var position) && position < 8 && result[position] == default)
+                if (int.TryParse(hashedString[5].ToString(), out var position) && position < 8 && result[position] == default)
                 {
-                    result[position] = hash[6];
+                    result[position] = hashedString[6];
                 }
                 if (result.All(ch => ch != default))
                 {
