@@ -11,43 +11,54 @@ public class Day_04 : BaseDay
 
     public override ValueTask<string> Solve_1()
     {
-        return new($"{ValidInput().Sum(entry => entry.Id)}");
+        int sum = 0;
+
+        foreach (var (Name, Id, Checksum) in _input)
+        {
+            if (IsValid(Name, Checksum))
+            {
+                sum += Id;
+            }
+        }
+
+        return new($"{sum}");
     }
 
     public override ValueTask<string> Solve_2()
     {
-        foreach (var (Name, Id, _) in ValidInput())
+        foreach (var (Name, Id, Checksum) in _input)
         {
-            var newNameArray = new List<char>(Name.Length);
-
-            foreach (var ch in Name)
+            if (IsValid(Name, Checksum))
             {
-                newNameArray.Add((char)('a' + ((ch - 'a' + Id) % 26)));
-            }
+                var newNameArray = new List<char>(Name.Length);
 
-            var stringWithoutSpaces = string.Concat(newNameArray);
+                foreach (var ch in Name)
+                {
+                    newNameArray.Add((char)('a' + ((ch - 'a' + Id) % 26)));
+                }
 
-            if (stringWithoutSpaces.Contains("northpole"))
-            {
-                return new($"{Id}");
+                var stringWithoutSpaces = string.Concat(newNameArray);
+
+                if (stringWithoutSpaces.Contains("northpole"))
+                {
+                    return new($"{Id}");
+                }
             }
         }
 
         throw new SolvingException("North Pole not found");
     }
 
-    private List<(string Name, int Id, string Checksum)> ValidInput()
+    private static bool IsValid(string Name, string Checksum)
     {
-        return _input
-            .Where(entry => entry.Checksum ==
-                string.Concat(
-                    entry.Name
-                        .GroupBy(ch => ch)
-                        .OrderByDescending(g => g.Count())
-                        .ThenBy(g => g.Key)
-                        .Select(g => g.Key)
-                        .Take(5)))
-            .ToList();
+        return Checksum ==
+             string.Concat(
+                 Name
+                    .GroupBy(ch => ch)
+                    .OrderByDescending(g => g.Count())
+                    .ThenBy(g => g.Key)
+                    .Select(g => g.Key)
+                    .Take(5));
     }
 
     private IEnumerable<(string Name, int Id, string Checksum)> ParseInput()
