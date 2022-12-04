@@ -11,56 +11,43 @@ public class Day_04 : BaseDay
 
     public override ValueTask<string> Solve_1()
     {
-        int sum = 0;
-
-        foreach (var (Name, Id, Checksum) in _input)
-        {
-            var mostCommonLetters = Name
-                .GroupBy(ch => ch)
-                .OrderByDescending(g => g.Count())
-                .ThenBy(g => g.Key)
-                .Select(g => g.Key)
-                .Take(5);
-
-            if (Checksum == string.Concat(mostCommonLetters))
-            {
-                sum += Id;
-            }
-        }
-
-        return new($"{sum}");
+        return new($"{ValidInput().Sum(entry => entry.Id)}");
     }
 
     public override ValueTask<string> Solve_2()
     {
-        foreach (var (Name, Id, Checksum) in _input)
+        foreach (var (Name, Id, _) in ValidInput())
         {
-            var mostCommonLetters = Name
-                .GroupBy(ch => ch)
-                .OrderByDescending(g => g.Count())
-                .ThenBy(g => g.Key)
-                .Select(g => g.Key)
-                .Take(5);
+            var newNameArray = new List<char>(Name.Length);
 
-            if (Checksum == string.Concat(mostCommonLetters))
+            foreach (var ch in Name)
             {
-                var newNameArray = new List<char>(Name.Length);
+                newNameArray.Add((char)('a' + ((ch - 'a' + Id) % 26)));
+            }
 
-                foreach (var ch in Name)
-                {
-                    newNameArray.Add((char)('a' + ((ch - 'a' + Id) % 26)));
-                }
+            var stringWithoutSpaces = string.Concat(newNameArray);
 
-                var stringWithoutSpaces = string.Concat(newNameArray);
-
-                if (stringWithoutSpaces.Contains("northpole"))
-                {
-                    return new($"{Id}");
-                }
+            if (stringWithoutSpaces.Contains("northpole"))
+            {
+                return new($"{Id}");
             }
         }
 
         throw new SolvingException("North Pole not found");
+    }
+
+    private List<(string Name, int Id, string Checksum)> ValidInput()
+    {
+        return _input
+            .Where(entry => entry.Checksum ==
+                string.Concat(
+                    entry.Name
+                        .GroupBy(ch => ch)
+                        .OrderByDescending(g => g.Count())
+                        .ThenBy(g => g.Key)
+                        .Select(g => g.Key)
+                        .Take(5)))
+            .ToList();
     }
 
     private IEnumerable<(string Name, int Id, string Checksum)> ParseInput()
