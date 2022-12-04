@@ -22,14 +22,18 @@ public class Day_05 : BaseDay
         {
             var str = _input + index++;
             var hash = MD5.HashData(encoder.GetBytes(str));
-            var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
 
-            if (hashedString.StartsWith("00000"))
+            if (hash[0] == 0 && hash[1] == 0)
             {
-                result += hashedString[5];
-                if (result.Length == 8)
+                var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
+
+                if (hashedString.StartsWith("00000"))
                 {
-                    return new(result);
+                    result += hashedString[5];
+                    if (result.Length == 8)
+                    {
+                        return new(result);
+                    }
                 }
             }
         }
@@ -45,17 +49,21 @@ public class Day_05 : BaseDay
         {
             var str = _input + index++;
             var hash = MD5.HashData(encoder.GetBytes(str));
-            var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
 
-            if (hashedString.StartsWith("00000"))
+            if (hash[0] == 0 && hash[1] == 0)
             {
-                if (int.TryParse(hashedString[5].ToString(), out var position) && position < 8 && result[position] == default)
+                var hashedString = string.Concat(hash.Select(b => b.ToString("x2")));
+
+                if (hashedString.StartsWith("00000"))
                 {
-                    result[position] = hashedString[6];
-                }
-                if (result.All(ch => ch != default))
-                {
-                    return new(string.Concat(result));
+                    if (int.TryParse(hashedString[5].ToString(), out var position) && position < 8 && result[position] == default)
+                    {
+                        result[position] = hashedString[6];
+                    }
+                    if (result.All(ch => ch != default))
+                    {
+                        return new(string.Concat(result));
+                    }
                 }
             }
         }
